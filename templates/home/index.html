@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>CHRIS'S BLOG</title>
+    <link rel="shortcut icon" href="{% static 'media/favicon128.ico' %}"/>
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_2544330_lndxi7tuaiq.css"/>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgb(98, 195, 228);
+        }
+
+        .header {
+            height: 70px;
+            opacity: 0;
+            width: 100%;
+            position: fixed;
+            z-index: 999;
+            transition: 0.5s ease;
+        }
+
+        .header:hover {
+            opacity: 1;
+            background-color: white;
+            box-shadow: 0 5px 10px gray;
+        }
+
+        .list {
+            margin: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .list li {
+            list-style: none;
+            float: left;
+            color: gray;
+            text-align: center;
+            padding: 21px 0 21px 0;
+            margin: 10px 0 10px 0;
+            flex: 1;
+            font-weight: bold;
+            transition: 0.4s ease;
+            display: inline-block;
+        }
+
+        svg {
+            vertical-align: middle;
+            margin-right: 0.5em;
+        }
+
+        #head_icon {
+            height: 5em;
+            width: 20em;
+            background: url("{% static '/images/website_icon.png' %}") no-repeat left;
+        {#background: url("{% static '/images/header.png' %}") no-repeat left;#} background-size: 100%;
+        }
+
+        li:hover svg path {
+            fill: rgb(98, 195, 228);
+        }
+
+        .list li:hover {
+            color: rgb(98, 195, 228);
+            border-bottom: solid rgb(98, 195, 228);
+            border-width: 5px;
+        }
+
+        #images {
+            width: 100%;
+            height: 100%;
+        }
+
+        #image_mask {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: transparent url({% static 'images/pattern.png' %}) repeat top left;
+            z-index: 1;
+        }
+
+        .image img {
+            width: 100%;
+        }
+
+        .image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            transition: 1s ease;
+        }
+
+        .path {
+            opacity: 0.2;
+            transition: ease 0.5s;
+        }
+
+        h1 {
+            transition: ease 0.5s;
+            display: inline-block;
+            text-shadow: none;
+            color: #ccc;
+            text-align: center;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 4rem;
+            width: fit-content;
+            margin: 0;
+            height: 50px;
+            line-height: 50px
+        }
+
+        h1:hover {
+            text-shadow: black 5px 5px 8px;
+        }
+
+        @keyframes float {
+            0% {
+                bottom: 2%;
+            }
+            50% {
+                bottom: 50%;
+            }
+            100% {
+                bottom: 2%;
+            }
+        }
+
+        p {
+            margin: 0;
+        }
+
+        #blog_display {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .component {
+            width: 85%;
+            height: fit-content;
+            margin: 0 auto;
+            flex: 1;
+            max-height: 280px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px gray;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .component_image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            transition: 0.5s ease;
+        }
+
+        .component_image img:hover {
+            box-shadow: 2px 2px 5px black;
+        }
+
+        .component_image {
+            width: fit-content;
+            height: fit-content;
+            flex: 1.5;
+        }
+
+        .introduce {
+            flex: 2;
+            padding-left: 10px;
+        }
+
+        #blog {
+            position: absolute;
+            height: fit-content;
+            width: 100%;
+            transition: 2s ease;
+            z-index: 4;
+        }
+
+        #carousel {
+            z-index: 4;
+            width: 100%;
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        {#border: 1px solid black;#}
+        }
+
+        #content {
+            height: fit-content;
+            width: 100%;
+            background: url('{% static 'images/anjie.jpg' %}') repeat left;
+            background-size: 25%;
+        }
+
+        #blog_display {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+            margin: 0 auto;
+            z-index: 5;
+            height: fit-content;
+            background: rgba(255, 255, 255, 0.9)
+        }
+
+        .footer {
+            height: 150px;
+            width: 100%;
+        }
+
+        .icon-back {
+            font-size: 3rem;
+        }
+
+        .back {
+            display: inline-block;
+            flex: 0.5;
+        {#float: left;#} padding-left: 10px;
+        }
+
+        .cover {
+            height: 170px;
+            width: 200px;
+            float: left;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 150%;
+        }
+
+        .cover_boxes {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100%;
+            height: 120%;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <ul class="list">
+        <li id="head_icon" style="flex: 1.3;border:0;padding: 0;margin: 0"></li>
+        <li style="margin-left: 7%">
+            <svg t="1618126341104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="2760" width="1.3em" height="1.3em">
+                <path d="M512 994.5A482.62 482.62 0 0 1 324.18 67.43a482.75 482.75 0 0 1 657.63 334.2 30 30 0 0 1-58.42 13.68 419 419 0 0 0-54.57-129.65 422.35 422.35 0 1 0 32.49 390.79 30 30 0 1 1 55.26 23.37A482.62 482.62 0 0 1 512 994.5z"
+                      p-id="2761" fill="#8a8a8a"></path>
+                <path d="M512 772a260 260 0 1 1 183.85-76.15A258.29 258.29 0 0 1 512 772z m0-460c-110.28 0-200 89.72-200 200s89.72 200 200 200 200-89.72 200-200-89.72-200-200-200z"
+                      p-id="2762" fill="#8a8a8a"></path>
+            </svg>
+            首页
+        </li>
+        <li>
+            <svg t="1618126112532" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="2580" width="1.3em" height="1.3em">
+                <path d="M509.544 0.04l5.894 0.083 4.625 0.655L525.3 2.21l4.339 1.76 439.64 220.68a40.927 40.927 0 0 1-32.332 75.02l-4.38-1.883L512 86.684 91.431 297.787a40.927 40.927 0 0 1-52.55-14.08l-2.456-4.133a40.927 40.927 0 0 1 14.08-52.55l4.174-2.374L496.284 3.11l4.215-1.473 4.339-1.023 4.706-0.573z"
+                      p-id="2581" fill="#8a8a8a"></path>
+                <path d="M511.59 528.084l5.935-0.368 4.502-0.86 3.315-0.982 3.315-1.35 440.623-221.09a40.927 40.927 0 0 0-32.332-75.06l-4.38 1.883L512 441.44 91.431 230.216a40.927 40.927 0 0 0-52.55 14.12l-2.415 4.133a40.927 40.927 0 0 0 14.08 52.551l4.174 2.415 440.623 221.089 4.42 1.678 3.274 0.9 4.215 0.737 4.339 0.245z"
+                      p-id="2582" fill="#8a8a8a"></path>
+                <path d="M511.59 753.184l5.935-0.368 4.502-0.86 3.315-0.982 3.315-1.35 440.623-221.09a40.927 40.927 0 0 0-32.332-75.06l-4.38 1.883L512 666.54 91.431 455.357a40.927 40.927 0 0 0-52.55 14.079l-2.415 4.133a40.927 40.927 0 0 0 14.08 52.55l4.174 2.416 440.623 221.089 4.42 1.678 3.274 0.9 4.215 0.737 4.339 0.245z"
+                      p-id="2583" fill="#8a8a8a"></path>
+                <path d="M511.59 998.748l5.935-0.368 4.502-0.86 3.315-0.982 3.315-1.35 440.623-221.09a40.927 40.927 0 0 0-32.332-75.06l-4.38 1.882L512 912.105 91.431 700.92A40.927 40.927 0 0 0 38.881 715l-2.415 4.133a40.927 40.927 0 0 0 14.08 52.55l4.174 2.415 440.623 221.09 4.42 1.677 3.274 0.9 4.215 0.737 4.339 0.246z"
+                      p-id="2584" fill="#8a8a8a"></path>
+            </svg>
+            归档
+        </li>
+        <li>
+            <svg t="1618126051406" class="icon" viewBox="0 0 1171 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="2363" width="1.3em" height="1.3em">
+                <path d="M1082.15 473.527a87.942 87.942 0 0 0-27.21 4.315l-434.688-371.2A82.798 82.798 0 0 0 541.038 0C495.91 0 458.9 36.864 458.606 82.432l-266.971 94.574a85.797 85.797 0 0 0-69.34-35.62 85.723 85.723 0 0 0-85.577 86.088c0 36.572 22.602 68.023 54.711 80.238L68.17 838.729A88.942 88.942 0 0 0 0.002 925.55a89.015 89.015 0 0 0 88.649 89.162c44.032 0 80.457-32.256 87.479-74.46l411.063-88.137a70.217 70.217 0 0 0 128.146-40.375c0-2.413 0-5.193-0.293-7.68l301.349-181.686c16.823 18.651 40.667 29.257 65.755 29.257a89.015 89.015 0 0 0 0-178.103zM158.94 305.298L309.98 466.14a119.808 119.808 0 0 0 4.9 138.387L128.367 845.897a125.66 125.66 0 0 0-11.264-4.9l22.894-529.555c6.73-1.17 12.873-3.291 19.017-6.07z m389.12-139.556c16.823-1.536 32.183-8.046 44.69-17.847l420.352 358.839a94.528 94.528 0 0 0-14.116 24.576l-470.748-9.216a120.905 120.905 0 0 0-60.196-94.647l80.091-261.705zM164.426 879.397l187.1-242.615a118.93 118.93 0 0 0 111.908 2.194l119.223 140.215a70.802 70.802 0 0 0-7.607 25.527l-404.773 86.674a54.345 54.345 0 0 0-5.851-11.995z m480.548-138.314a73.143 73.143 0 0 0-25.892 4.901L501.688 607.817c8.777-10.752 15.872-23.406 20.48-36.864l468.845 9.216-298.35 179.932a67.51 67.51 0 0 0-47.689-19.164zM472.65 129.463c7.022 10.46 16.457 19.383 27.502 25.527l-78.556 257.682a119.15 119.15 0 0 0-77.092 18.725l-149.431-158.94c7.9-13.312 12.434-28.599 12.434-44.91v-4.022l265.216-94.062z"
+                      fill="#8a8a8a" p-id="2364"></path>
+            </svg>
+            友链
+        </li>
+        <li style="margin-right: 10%">
+            <svg t="1618125152029" class="icon" viewBox="0 0 1293 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="2186" width="1.3em" height="1.3em">
+                <path d="M246.568 554.977a33.677 33.677 0 1 1-49.354 45.766L15.875 405.39a33.677 33.677 0 0 1 15.544-55.265L1243.267 8.304a33.677 33.677 0 0 1 37.53 50.548l-605.99 942.564a33.677 33.677 0 0 1-52.609 5.114L481.113 859.732 330.66 1007.261a33.677 33.677 0 0 1-57.191-24.112V668.098a33.677 33.677 0 0 1 15.21-28.164l498.185-327.207a33.677 33.677 0 1 1 36.932 56.195l-483.04 317.642v216.81L458.33 788.192a33.677 33.677 0 0 1 47.826 0.664l135.107 140.555 534.85-831.9-1073.42 302.363 143.876 155.168z"
+                      p-id="2187" fill="#8a8a8a"></path>
+            </svg>
+            关于站主
+        </li>
+
+        <li style="flex: 0.35;border:0;padding: 0;margin: 0">
+            <svg t="1618124497078" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="2009" width="2em" height="2em">
+                <path d="M512 0C229.23 0 0 229.23 0 512s229.23 512 512 512 512-229.23 512-512S794.77 0 512 0z m0 964a450.18 450.18 0 0 1-293.37-108.12 337.88 337.88 0 0 1 586.74 0A450.18 450.18 0 0 1 512 964zM367.31 551.37A204.63 204.63 0 1 1 512 611.3a203.27 203.27 0 0 1-144.69-59.93z m482.15 261.35a398.29 398.29 0 0 0-219.34-169.2c86.85-43.4 146.5-133.15 146.5-236.84 0-146.15-118.47-264.63-264.62-264.63S247.38 260.53 247.38 406.68c0 103.7 59.65 193.44 146.5 236.84a398.28 398.28 0 0 0-219.34 169.21 452.3 452.3 0 1 1 674.92 0z"
+                      p-id="2010" fill="#8a8a8a"></path>
+            </svg>
+        </li>
+        <li style="flex: 0.35;border:0;padding: 0;margin: 0">
+            <svg t="1618124169285" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="1833" width="2em" height="2em">
+                <path d="M1001.4 964.6L789.3 752.51q6.68-7.38 13-15a451.52 451.52 0 0 0 43.38-62.6A448.15 448.15 0 0 0 631.13 41a445.4 445.4 0 0 0-347.7 0A451.54 451.54 0 0 0 45.08 279.33a445.31 445.31 0 0 0 0 347.71 451.63 451.63 0 0 0 238.35 238.35 445.4 445.4 0 0 0 347.7 0 446.83 446.83 0 0 0 114.72-70.75L958.6 1007.4a30.26 30.26 0 0 0 42.8-42.8zM607.47 809.69a384.81 384.81 0 0 1-300.38 0 391.12 391.12 0 0 1-206.32-206.32 384.92 384.92 0 0 1 0-300.38A391.15 391.15 0 0 1 307.09 96.68a384.81 384.81 0 0 1 300.38 0A391.08 391.08 0 0 1 813.78 303a384.71 384.71 0 0 1-20.57 341.74A391.66 391.66 0 0 1 755.64 699c-7.88 9.53-16.31 18.79-25 27.54-0.64 0.64-1.3 1.26-2 1.9a30.24 30.24 0 0 0-5.66 5.5 387.47 387.47 0 0 1-115.51 75.75z"
+                      p-id="1834" fill="#8a8a8a"></path>
+            </svg>
+        </li>
+    </ul>
+</div>
+<div id="images" style="position: fixed">
+    <div style="z-index: 0;position: absolute;width: 100%;height: 100%">
+{#        轮播图部分#}
+        <ul class="image_list"
+            style="position: relative;margin: 0;padding: 0;width: 100%;height: 100%;overflow: hidden">
+            {#            此处使用for循环进行动态渲染控制z-index与图片#}
+            {#            {% for foo in  %}#}
+            {#            #}
+            {#            {% endfor %}#}
+            <li class="image" style="opacity: 1">
+                <img src="{% static 'images/chuxue.jpg' %}">
+            </li>
+            <li class="image" style="opacity: 0">
+                <img src="{% static 'images/hemo.jpg' %}">
+            </li>
+            <li class="image" style="opacity: 0;background-size: 150%">
+                <img style="height: 110%" src="{% static 'images/qiya.jpg' %}">
+            </li>
+            <li class="image" style="opacity: 0">
+                <img src="{% static 'images/saileiya.jpg' %}">
+            </li>
+            <li class="image" style="opacity: 0">
+                <img src="{% static 'images/dady.jpg' %}">
+            </li>
+            <li class="image" style="opacity: 0">
+                <img src="{% static 'images/yuri.jpg' %}">
+            </li>
+            <li class="image" style="opacity: 0">
+                <img src="{% static 'images/zhongzhuang.jpg' %}">
+            </li>
+            <li class="image" style="opacity: 0">
+                <img src="{% static 'images/shuanglang.jpg' %}">
+            </li>
+        </ul>
+    </div>
+
+</div>
+<div id="icons" style="position: relative;z-index: 3;width: 100%;height: 100%;">
+    <div class="header_bottom" onclick="" style="z-index: 3;position: fixed;right: 0">
+        <ul class="list" style="float: right;width: 137px;text-align: right;padding: 17px 0 0 0">
+            <li style="flex: 0.5;border:0;padding: 0;margin: 0">
+                <svg t="1618124497078" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
+                     p-id="2009" width="2em" height="2em">
+                    <path d="M512 0C229.23 0 0 229.23 0 512s229.23 512 512 512 512-229.23 512-512S794.77 0 512 0z m0 964a450.18 450.18 0 0 1-293.37-108.12 337.88 337.88 0 0 1 586.74 0A450.18 450.18 0 0 1 512 964zM367.31 551.37A204.63 204.63 0 1 1 512 611.3a203.27 203.27 0 0 1-144.69-59.93z m482.15 261.35a398.29 398.29 0 0 0-219.34-169.2c86.85-43.4 146.5-133.15 146.5-236.84 0-146.15-118.47-264.63-264.62-264.63S247.38 260.53 247.38 406.68c0 103.7 59.65 193.44 146.5 236.84a398.28 398.28 0 0 0-219.34 169.21 452.3 452.3 0 1 1 674.92 0z"
+                          p-id="2010" fill="white"></path>
+                </svg>
+            </li>
+            <li style="flex: 0.5;border:0;padding: 0;margin: 0">
+                <svg t="1618124169285" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
+                     p-id="1833" width="2em" height="2em">
+                    <path d="M1001.4 964.6L789.3 752.51q6.68-7.38 13-15a451.52 451.52 0 0 0 43.38-62.6A448.15 448.15 0 0 0 631.13 41a445.4 445.4 0 0 0-347.7 0A451.54 451.54 0 0 0 45.08 279.33a445.31 445.31 0 0 0 0 347.71 451.63 451.63 0 0 0 238.35 238.35 445.4 445.4 0 0 0 347.7 0 446.83 446.83 0 0 0 114.72-70.75L958.6 1007.4a30.26 30.26 0 0 0 42.8-42.8zM607.47 809.69a384.81 384.81 0 0 1-300.38 0 391.12 391.12 0 0 1-206.32-206.32 384.92 384.92 0 0 1 0-300.38A391.15 391.15 0 0 1 307.09 96.68a384.81 384.81 0 0 1 300.38 0A391.08 391.08 0 0 1 813.78 303a384.71 384.71 0 0 1-20.57 341.74A391.66 391.66 0 0 1 755.64 699c-7.88 9.53-16.31 18.79-25 27.54-0.64 0.64-1.3 1.26-2 1.9a30.24 30.24 0 0 0-5.66 5.5 387.47 387.47 0 0 1-115.51 75.75z"
+                          p-id="1834" fill="white"></path>
+                </svg>
+            </li>
+        </ul>
+    </div>
+    <div style="position: relative;z-index: 3;width: 100%;top: 45%;height: 50px;line-height: 50px;text-align: center">
+        <svg t="1619608191563" class="icon" viewBox="0 0 1024 1024" version="1.1"
+             onmouseover="moveAction(0, this, 'left', 'over')"
+             onmouseout="moveAction(0, this, 'left', 'leave')"
+             onclick="switch_image('back')"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="2966" width="50" height="50" style="position: absolute;left: 3%;transition: 0.8s ease">
+            <path d="M410.7 512.4L749.1 174c24.9-24.9 24.9-65.6 0-90.5-24.9-24.9-65.6-24.9-90.5 0L274.9 467.2c-6.2 6.2-10.9 13.4-14 21.1-5.4 13.5-6.1 28.5-2 42.4 0.6 2 1.3 3.9 2 5.9 3.1 7.7 7.8 14.9 14 21.1l383.6 383.6c24.9 24.9 65.6 24.9 90.5 0 24.9-24.9 24.9-65.6 0-90.5L410.7 512.4z"
+                  p-id="2967" fill="white" class="path"></path>
+        </svg>
+        <h1 style="">
+            WELCOME TO MY BLOG</h1>
+        <svg t="1619608803523" class="icon" viewBox="0 0 1024 1024" version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             onmouseover="moveAction(1, this, 'right', 'over')"
+             onmouseout="moveAction(1, this, 'right', 'leave')"
+             onclick="switch_image('next')"
+             p-id="6676" width="50" height="50" style="position: absolute;right: 3%;transition: 0.8s ease;">
+            <path d="M613.3 512.4L274.9 850.8c-24.9 24.9-24.9 65.6 0 90.5 24.9 24.9 65.6 24.9 90.5 0L749 557.7c6.2-6.2 10.9-13.4 14-21.1 5.4-13.5 6.1-28.5 2-42.4-0.6-2-1.3-3.9-2-5.9-3.1-7.7-7.8-14.9-14-21.1L365.4 83.5c-24.9-24.9-65.6-24.9-90.5 0-24.9 24.9-24.9 65.6 0 90.5l338.4 338.4z"
+                  p-id="6677" fill="white" class="path"></path>
+        </svg>
+    </div>
+    <div id="down"
+         style="position: absolute;z-index: 3;width: 100%;bottom: 3%;height: 50px;line-height: 50px;text-align: center;">
+        <svg t="1619614103279" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+             onmouseover="standBy(this)"
+             onmouseout="Continue(this)"
+             onclick="drawer()"
+             p-id="13125" width="50" height="50"
+             style="position: absolute;bottom: 2%;animation: float 2s ease infinite;">
+            <path d="M510.796592 786.864138c-5.270027 0-10.559497-1.072425-15.464203-3.245927l-408.995021-180.439582c-19.37528-8.537444-28.141944-31.188326-19.6045-50.564629 8.537444-19.349697 31.213909-28.14092 50.564629-19.6045l393.499096 173.58957 393.525702-173.613106c19.37528-8.537444 42.021046 0.25378 50.558489 19.6045 8.537444 19.37528-0.228197 42.022069-19.6045 50.559513L526.287401 783.592628C521.351995 785.767154 516.062526 786.864138 510.796592 786.864138L510.796592 786.864138zM510.796592 486.126726c-5.270027 0-10.559497-1.072425-15.464203-3.242857L86.337367 302.440194c-19.37528-8.537444-28.141944-31.18321-19.6045-50.559513 8.537444-19.37528 31.213909-28.14706 50.564629-19.609617l393.499096 173.593663 393.525702-173.6172c19.37528-8.537444 42.021046 0.228197 50.558489 19.6045 8.537444 19.380396-0.228197 42.027186-19.6045 50.563606l-408.988882 180.439582C521.351995 485.054301 516.062526 486.126726 510.796592 486.126726L510.796592 486.126726zM510.796592 486.126726"
+                  style="transition: 0.5s ease;opacity: 0.3;"
+                  class="down" p-id="13126" fill="white"></path>
+        </svg>
+    </div>
+
+</div>
+<div id="image_mask" style="position: fixed"></div>
+<div id="blog">
+    <div id="content">
+        <div id="blog_display">
+            {#            博客粗略信息展示组件#}
+            <div id="carousel">
+                <div class="back">
+                    <i class="iconfont icon-back"></i>
+                </div>
+                <div style="height: 40%;flex: 6;overflow: hidden;">
+                    <ul style="height: 100%;list-style: none;padding: 0;float: left;margin: 0;width: 2000px">
+                        <li class="cover" style="background-image: url('{% static 'images/qiya.jpg' %}') ">
+                        </li>
+                        <li class="cover">
+                            <div class="cover_boxes" style="background-image: url('{% static 'images/dady.jpg' %}') "></div>
+                        </li>
+                        <li class="cover">
+                            <div class="cover_boxes" style="background-image: url('{% static 'images/hemo.jpg' %}') "></div>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="back" style="transform: rotate(-180deg);">
+                    <i class="iconfont icon-back"></i>
+                </div>
+            </div>
+            <div class="component" style="display: flex;">
+                <div class="component_image">
+                    <img src="{% static 'images/dady.jpg' %}">
+                </div>
+                <div class="introduce">
+                    {#                    博客文字简介#}
+                    <p>wqeqew</p>
+                    <p>qweqeqw</p>
+                    <p>wqeweqe</p>
+                </div>
+            </div>
+            <div class="component" style="display: flex;">
+                <div class="component_image">
+                    <img src="{% static 'images/chuxue.jpg' %}">
+                </div>
+                <div class="introduce">
+                    {#                    博客文字简介#}
+                    <p>wqeqew</p>
+                    <p>qweqeqw</p>
+                    <p>wqeweqe</p>
+                </div>
+            </div>
+            <div class="component" style="display: flex;">
+                <div class="component_image">
+                    <img src="{% static 'images/hemo.jpg' %}">
+                </div>
+                <div class="introduce">
+                    {#                    博客文字简介#}
+                    <p>wqeqew</p>
+                    <p>qweqeqw</p>
+                    <p>wqeweqe</p>
+                </div>
+            </div>
+            <div class="footer" style="font-size: 0.5rem;
+                    text-align: center">
+                <p>© 2020 又是一个小细节 蜀ICP备2020027609号</p>
+                {#                <div class="info_display"#}
+                {#                     >#}
+                {#                </div>#}
+            </div>
+        </div>
+    </div>
+
+</div>
+{#<div>Logo通过<a href="https://www.designevo.com/cn/" title="免费在线logo制作软件">DesignEvo</a>设计制作</div>#}
+</body>
+<script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+<script>
+    var cont = 0;
+
+    window.onload = (function () {
+        let height = $(window).height();
+        let blog = document.getElementById("blog");
+        blog.style.top = height;
+    });
+
+    function drawer() {
+        $("html,body").animate({scrollTop: $("#blog").offset().top}, 700);
+    }
+
+    function switch_image(way) {
+        let obj = document.getElementsByClassName("image");
+        let length = obj.length;
+        if (cont < length - 1) {
+            if (way == "next") {
+                obj[cont].style.opacity = 0;
+                obj[cont + 1].style.opacity = 1;
+                cont = cont + 1;
+            }
+            else {
+                if (cont === 0) {
+                    obj[cont].style.opacity = 0;
+                    obj[length - 1].style.opacity = 1;
+                    cont = length - 1;
+                } else {
+                    obj[cont].style.opacity = 0;
+                    obj[cont - 1].style.opacity = 1;
+                    cont = cont - 1;
+                }
+            }
+        }
+        else {
+            if (way == "next") {
+                obj[cont].style.opacity = 0;
+                cont = 0;
+                obj[cont].style.opacity = 1;
+            } else {
+                obj[cont].style.opacity = 0;
+                obj[cont - 1].style.opacity = 1;
+                cont = cont - 1;
+            }
+        }
+    }
+
+    function moveAction(num, obj, dir, way) {
+        let path = document.getElementsByClassName("path");
+        if (way == "over") {
+            path[num].style.opacity = 1;
+            if (dir == "right") {
+                obj.style.right = "2%";
+            } else {
+                obj.style.left = "2%";
+            }
+        } else {
+            path[num].style.opacity = 0.2;
+            if (dir == "right") {
+                obj.style.right = "3%";
+            } else {
+                obj.style.left = "3%";
+            }
+        }
+    }
+
+    function standBy(obj) {
+        let down = document.getElementsByClassName("down")[0];
+        down.style.opacity = 1;
+        obj.style.animationPlayState = "paused"
+    }
+
+    function Continue(obj) {
+        let down = document.getElementsByClassName("down")[0];
+        down.style.opacity = 0.3;
+        obj.style.animationPlayState = "running"
+    }
+</script>
+</html>
